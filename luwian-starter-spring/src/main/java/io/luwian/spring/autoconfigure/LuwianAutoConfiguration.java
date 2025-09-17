@@ -11,6 +11,7 @@ import io.luwian.spring.observability.errors.LuwianErrorProperties;
 import io.luwian.spring.observability.logging.LuwianCorrelationFilter;
 import io.luwian.spring.observability.logging.LuwianHttpLoggingFilter;
 import io.luwian.spring.observability.logging.LuwianJsonLoggingConfig;
+import io.luwian.spring.observability.logging.LuwianLoggingProperties;
 import io.luwian.spring.observability.metrics.LuwianMetricsConfig;
 import io.luwian.spring.observability.tracing.LuwianTracingConfig;
 
@@ -19,7 +20,7 @@ import io.luwian.spring.observability.tracing.LuwianTracingConfig;
  */
 @AutoConfiguration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties({ LuwianErrorProperties.class })
+@EnableConfigurationProperties({ LuwianErrorProperties.class, LuwianLoggingProperties.class })
 public class LuwianAutoConfiguration {
 
     // --- Logging JSON config (conditional) ---
@@ -31,13 +32,13 @@ public class LuwianAutoConfiguration {
 
     // --- Correlation & HTTP logging filters ---
     @Bean
-    LuwianCorrelationFilter luwianCorrelationFilter() {
-        return new LuwianCorrelationFilter();
+    LuwianCorrelationFilter luwianCorrelationFilter(LuwianLoggingProperties props) {
+        return new LuwianCorrelationFilter(props);
     }
 
     @Bean
-    LuwianHttpLoggingFilter luwianHttpLoggingFilter() {
-        return new LuwianHttpLoggingFilter();
+    LuwianHttpLoggingFilter luwianHttpLoggingFilter(LuwianLoggingProperties props) {
+        return new LuwianHttpLoggingFilter(props);
     }
 
     // --- Error handler (always present) ---
