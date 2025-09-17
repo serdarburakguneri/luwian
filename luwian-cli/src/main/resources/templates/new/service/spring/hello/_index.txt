@@ -1,0 +1,11 @@
+# List of template files to render (relative to classpath root)
+.editorconfig.mustache
+.gitignore.mustache
+.github/workflows/ci.yml.mustache
+README.md.mustache
+Dockerfile.mustache
+pom.xml.mustache
+src/main/resources/application.yml.mustache
+src/main/java/{{pkgPath}}/Application.java.mustache
+src/main/java/{{pkgPath}}/web/HelloController.java.mustache
+src/test/java/{{pkgPath}}/web/HelloControllerTest.java.mustache
