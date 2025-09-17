@@ -1,0 +1,28 @@
+server:
+  port: {{httpPort}}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+
+luwian:
+  logging:
+    json: true
+    http:
+      body: false
+  metrics:
+    enabled: true
+  tracing:
+    enabled: true
+  error:
+    include-stacktrace: on-trace

@@ -1,0 +1,13 @@
+package {{pkg}}.web;
+
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class HelloControllerTest {
+
+    @Test
+    void placeholder() {
+        var c = new HelloController();
+        assertThat(c.hello()).contains("Hello");
+    }
+}
