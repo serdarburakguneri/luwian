@@ -5,7 +5,7 @@ Framework-wide contract used by both Spring and Quarkus starters.
 ## Media Type
 `application/problem+json`
 
-## JSON Schema (minimum shape)
+## JSON Schema
 ```json
 {
   "type": "https://errors.luwian.io/<code>",
