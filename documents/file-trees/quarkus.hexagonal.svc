@@ -1,0 +1,51 @@
+<svc>/
+  pom.xml
+  Dockerfile
+  README.md
+  .editorconfig
+  .gitignore
+  .github/workflows/ci.yml
+
+  src/main/java/<pkg>/
+    boot/
+      ApplicationLifecycle.java
+      ErrorMapper.java
+    api/
+      dto/
+        <Name>Request.java
+        <Name>Response.java
+    application/
+      port/
+        in/
+          <Name>UseCase.java
+        out/
+          Save<Name>Port.java
+      service/
+        <Name>Service.java               # transaction boundary
+    domain/
+      model/
+        <Aggregate>.java
+      event/
+        <DomainEvent>.java
+    adapters/
+      http/
+        <Name>Resource.java              # JAX-RS resource
+      persistence/
+        jpa/
+          <Aggregate>Entity.java
+          JpaSave<Name>Adapter.java      # implements port.out (Panache or pure JPA)
+      messaging/
+        Placeholder.java
+
+  src/main/resources/
+    application.properties
+
+  src/test/java/<pkg>/
+    adapters/
+      http/
+        <Name>ResourceTest.java          # @QuarkusTest
+    application/
+      service/
+        <Name>ServiceTest.java
+    arch/
+      HexArchTest.java                   # only when --strict-arch

@@ -1,0 +1,40 @@
+<svc>/
+  pom.xml
+  Dockerfile
+  README.md
+  .editorconfig
+  .gitignore
+  .github/workflows/ci.yml
+
+  src/main/java/<pkg>/
+    boot/
+      Application.java                   # @SpringBootApplication entry
+      WebConfig.java                     # MVC config, filters wiring
+      ErrorHandling.java                 # Problem+JSON global handler (skeleton)
+    api/
+      dto/
+        <Name>Request.java               # placeholder DTO
+        <Name>Response.java
+    app/
+      service/
+        <Name>Service.java               # application/service layer
+    domain/
+      model/
+        Placeholder.java                 # optional domain model seed
+    infra/
+      persistence/
+        RepositoryConfig.java            # if DB added later
+      http/
+        HttpClientConfig.java            # if HTTP client added later
+
+  src/main/resources/
+    application.yml                      # ports, actuator, logging json = true
+
+  src/test/java/<pkg>/
+    app/
+      service/
+        <Name>ServiceTest.java           # unit test
+    boot/
+      WebSliceTest.java                  # web layer test (MockMvc)
+    arch/
+      LayeredArchTest.java               # only when --strict-arch
