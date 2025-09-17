@@ -3,6 +3,7 @@ package io.luwian.spring.autoconfigure;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import io.luwian.spring.observability.errors.LuwianErrorHandler;
@@ -14,10 +15,11 @@ import io.luwian.spring.observability.metrics.LuwianMetricsConfig;
 import io.luwian.spring.observability.tracing.LuwianTracingConfig;
 
 /**
- * Spring Boot AutoConfiguration entry for Luwian (skeleton only).
+ * Spring Boot AutoConfiguration entry for Luwian.
  */
 @AutoConfiguration
 @ConditionalOnWebApplication
+@EnableConfigurationProperties({ LuwianErrorProperties.class })
 public class LuwianAutoConfiguration {
 
     // --- Logging JSON config (conditional) ---
@@ -38,16 +40,10 @@ public class LuwianAutoConfiguration {
         return new LuwianHttpLoggingFilter();
     }
 
-    // --- Error handling configuration ---
+    // --- Error handler (always present) ---
     @Bean
-    LuwianErrorProperties luwianErrorProperties() {
-        return new LuwianErrorProperties();
-    }
-
-    // --- Problem+JSON handler (always present) ---
-    @Bean
-    LuwianErrorHandler luwianErrorHandler(LuwianErrorProperties errorProperties) {
-        return new LuwianErrorHandler(errorProperties);
+    LuwianErrorHandler luwianErrorHandler(LuwianErrorProperties props) {
+        return new LuwianErrorHandler(props);
     }
 
     // --- Metrics (conditional) ---
