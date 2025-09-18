@@ -14,16 +14,19 @@ management:
 # Luwian defaults: safe & observable out of the box
 luwian:
   logging:
-    json: true          # set to true only if logstash encoder is on classpath
+    json: true          # requires logstash encoder if you want JSON logs
     http:
-      body: false       # keep off in prod; flip on locally if needed
-  metrics:
-    enabled: true       # actuator prometheus exposed when configured
-  tracing:
-    enabled: true       # no-op unless OTel on classpath and configured
+      body: false       # off in prod; flip on locally if needed
   error:
-    include-stacktrace: on-trace  # add detail when there's a correlation/trace
+    include-stacktrace: on-trace
+  metrics:
+    enabled: true
+    service: ${spring.application.name:hello-service}
+    environment: dev
+    version: 0.1.0
+    aop-timed: true
+  tracing:
+    enabled: true
 
-# Optional: if you include the logstash encoder, you can add a minimal logback config:
-# (uncomment the file below and include the encoder dependency)
-# See: src/main/resources/logback-spring.xml
+# Optional: if you include logstash-logback-encoder, you can add:
+#   logback-spring.xml.mustache with JSON encoder configuration

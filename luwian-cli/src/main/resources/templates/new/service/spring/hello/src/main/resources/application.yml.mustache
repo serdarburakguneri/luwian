@@ -11,18 +11,22 @@ management:
       probes:
         enabled: true
 
-logging:
-  level:
-    root: INFO
-
+# Luwian defaults: safe & observable out of the box
 luwian:
   logging:
-    json: true
+    json: true          # requires logstash encoder if you want JSON logs
     http:
-      body: false
-  metrics:
-    enabled: true
-  tracing:
-    enabled: true
+      body: false       # off in prod; flip on locally if needed
   error:
     include-stacktrace: on-trace
+  metrics:
+    enabled: true
+    service: ${spring.application.name:hello-service}
+    environment: dev
+    version: 0.1.0
+    aop-timed: true
+  tracing:
+    enabled: true
+
+# Optional: if you include logstash-logback-encoder, you can add:
+#   logback-spring.xml.mustache with JSON encoder configuration
