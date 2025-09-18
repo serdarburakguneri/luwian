@@ -35,15 +35,13 @@ public class ProblemDetailFactory {
                                                 ErrorConstants.INTERNAL_ERROR_TYPE_PATH));
         Problem p =
                 new BasicProblem.Builder()
-                        .type(URI.create(code.typeUri(ProblemDetailConstants.ERROR_BASE_URL)))
+                        .type(URI.create(code.typeUri(ErrorConstants.ERROR_BASE_URL)))
                         .title(code.title())
                         .status(code.httpStatus())
                         .detail(conciseDetail(code.httpStatus()))
                         .instance(URI.create(req.getRequestURI()))
-                        .put(
-                                ProblemDetailConstants.TIMESTAMP_PROPERTY,
-                                OffsetDateTime.now().toString())
-                        .put(ProblemDetailConstants.ERROR_CODE_PROPERTY, code.code())
+                        .put(ErrorConstants.TIMESTAMP_PROPERTY, OffsetDateTime.now().toString())
+                        .put(ErrorConstants.ERROR_CODE_PROPERTY, code.code())
                         .build();
 
         ProblemDetail pd =
@@ -54,21 +52,19 @@ public class ProblemDetailFactory {
         p.extensions().forEach(pd::setProperty);
         correlation
                 .getCorrelationId()
-                .ifPresent(
-                        cid -> pd.setProperty(ProblemDetailConstants.CORRELATION_ID_PROPERTY, cid));
+                .ifPresent(cid -> pd.setProperty(ErrorConstants.CORRELATION_ID_PROPERTY, cid));
         return pd;
     }
 
     private static String conciseDetail(int status) {
         return switch (status) {
-            case ProblemDetailConstants.BAD_REQUEST_STATUS ->
-                    ProblemDetailConstants.BAD_REQUEST_DETAIL;
-            case ProblemDetailConstants.NOT_FOUND_STATUS -> ProblemDetailConstants.NOT_FOUND_DETAIL;
-            case ProblemDetailConstants.FORBIDDEN_STATUS -> ProblemDetailConstants.FORBIDDEN_DETAIL;
-            case ProblemDetailConstants.CONFLICT_STATUS -> ProblemDetailConstants.CONFLICT_DETAIL;
-            case ProblemDetailConstants.METHOD_NOT_ALLOWED_STATUS ->
-                    ProblemDetailConstants.METHOD_NOT_ALLOWED_DETAIL;
-            default -> ProblemDetailConstants.INTERNAL_ERROR_DETAIL;
+            case ErrorConstants.BAD_REQUEST_STATUS -> ErrorConstants.BAD_REQUEST_DETAIL;
+            case ErrorConstants.NOT_FOUND_STATUS -> ErrorConstants.NOT_FOUND_DETAIL;
+            case ErrorConstants.FORBIDDEN_STATUS -> ErrorConstants.FORBIDDEN_DETAIL;
+            case ErrorConstants.CONFLICT_STATUS -> ErrorConstants.CONFLICT_DETAIL;
+            case ErrorConstants.METHOD_NOT_ALLOWED_STATUS ->
+                    ErrorConstants.METHOD_NOT_ALLOWED_DETAIL;
+            default -> ErrorConstants.INTERNAL_ERROR_DETAIL;
         };
     }
 }
