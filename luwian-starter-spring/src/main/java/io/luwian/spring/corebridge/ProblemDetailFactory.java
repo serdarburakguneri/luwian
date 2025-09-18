@@ -1,43 +1,21 @@
 package io.luwian.spring.corebridge;
 
-import io.luwian.core.error.ErrorCatalog;
-import io.luwian.core.error.ErrorCode;
-import io.luwian.core.error.Problem;
-import io.luwian.core.obs.CorrelationContext;
+import java.net.URI;
+import java.time.OffsetDateTime;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
+import io.luwian.core.error.BasicProblem;
+import io.luwian.core.error.ErrorCatalog;
+import io.luwian.core.error.ErrorCode;
+import io.luwian.core.error.ErrorConstants;
+import io.luwian.core.error.Problem;
+import io.luwian.core.obs.CorrelationContext;
 import jakarta.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.Map;
-import java.util.Optional;
 
 /** Converts exceptions to Spring ProblemDetail via core catalog + builder. */
 public class ProblemDetailFactory {
-
-    // Error base URL
-    private static final String ERROR_BASE_URL = "https://errors.luwian.io";
-
-    // Property keys
-    private static final String PROP_TIMESTAMP = "timestamp";
-    private static final String PROP_ERROR_CODE = "errorCode";
-    private static final String PROP_CORRELATION_ID = "correlationId";
-
-    // Detail messages
-    private static final String DETAIL_BAD_REQUEST = "Request body contains invalid or unsupported values.";
-    private static final String DETAIL_NOT_FOUND = "Requested resource was not found.";
-    private static final String DETAIL_FORBIDDEN = "You are not allowed to perform this operation.";
-    private static final String DETAIL_CONFLICT = "Request cannot be completed due to resource state.";
-    private static final String DETAIL_METHOD_NOT_ALLOWED = "HTTP method is not allowed for this endpoint.";
-    private static final String DETAIL_INTERNAL_ERROR = "An unexpected error occurred.";
-
-    // HTTP status codes
-    private static final int STATUS_BAD_REQUEST = 400;
-    private static final int STATUS_NOT_FOUND = 404;
-    private static final int STATUS_FORBIDDEN = 403;
-    private static final int STATUS_CONFLICT = 409;
-    private static final int STATUS_METHOD_NOT_ALLOWED = 405;
 
     private final ErrorCatalog catalog;
     private final CorrelationContext correlation;
@@ -49,16 +27,16 @@ public class ProblemDetailFactory {
 
     public ProblemDetail toProblemDetail(Throwable t, HttpServletRequest req) {
         ErrorCode code = catalog.resolve(t).orElseGet(
-                () -> new ErrorCode("LUW-INT-000", 500, "Internal server error", "internal-error")
+                () -> new ErrorCode(ErrorConstants.INTERNAL_ERROR_CODE, ErrorConstants.INTERNAL_ERROR_STATUS, ErrorConstants.INTERNAL_ERROR_TITLE, ErrorConstants.INTERNAL_ERROR_TYPE_PATH)
         );
-        Problem p = new ProblemBuilderImpl()
-                .type(URI.create(code.typeUri(ERROR_BASE_URL)))
+        Problem p = new BasicProblem.Builder()
+                .type(URI.create(code.typeUri(ProblemDetailConstants.ERROR_BASE_URL)))
                 .title(code.title())
                 .status(code.httpStatus())
                 .detail(conciseDetail(code.httpStatus()))
                 .instance(URI.create(req.getRequestURI()))
-                .put(PROP_TIMESTAMP, OffsetDateTime.now().toString())
-                .put(PROP_ERROR_CODE, code.code())
+                .put(ProblemDetailConstants.TIMESTAMP_PROPERTY, OffsetDateTime.now().toString())
+                .put(ProblemDetailConstants.ERROR_CODE_PROPERTY, code.code())
                 .build();
 
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(p.status()), p.detail());
@@ -66,18 +44,18 @@ public class ProblemDetailFactory {
         pd.setType(p.type());
         pd.setInstance(p.instance());
         p.extensions().forEach(pd::setProperty);
-        correlation.getCorrelationId().ifPresent(cid -> pd.setProperty(PROP_CORRELATION_ID, cid));
+        correlation.getCorrelationId().ifPresent(cid -> pd.setProperty(ProblemDetailConstants.CORRELATION_ID_PROPERTY, cid));
         return pd;
     }
 
     private static String conciseDetail(int status) {
         return switch (status) {
-            case STATUS_BAD_REQUEST -> DETAIL_BAD_REQUEST;
-            case STATUS_NOT_FOUND -> DETAIL_NOT_FOUND;
-            case STATUS_FORBIDDEN -> DETAIL_FORBIDDEN;
-            case STATUS_CONFLICT -> DETAIL_CONFLICT;
-            case STATUS_METHOD_NOT_ALLOWED -> DETAIL_METHOD_NOT_ALLOWED;
-            default -> DETAIL_INTERNAL_ERROR;
+            case ProblemDetailConstants.BAD_REQUEST_STATUS -> ProblemDetailConstants.BAD_REQUEST_DETAIL;
+            case ProblemDetailConstants.NOT_FOUND_STATUS -> ProblemDetailConstants.NOT_FOUND_DETAIL;
+            case ProblemDetailConstants.FORBIDDEN_STATUS -> ProblemDetailConstants.FORBIDDEN_DETAIL;
+            case ProblemDetailConstants.CONFLICT_STATUS -> ProblemDetailConstants.CONFLICT_DETAIL;
+            case ProblemDetailConstants.METHOD_NOT_ALLOWED_STATUS -> ProblemDetailConstants.METHOD_NOT_ALLOWED_DETAIL;
+            default -> ProblemDetailConstants.INTERNAL_ERROR_DETAIL;
         };
     }
 }

@@ -1,12 +1,33 @@
 
 server:
   port: 8080
+
+# Luwian Configuration
+luwian:
+  logging:
+    json: true
+    http:
+      body: false
+    tenancy-header: X-Tenant
+  error:
+    include-stacktrace: on-trace
+  metrics:
+    enabled: true
+    service: quickstart-spring
+    environment: development
+    version: 1.0.0
+
+# Spring Boot Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health,info,prometheus,metrics
   endpoint:
     health:
       probes:
+        enabled: true
+  metrics:
+    export:
+      prometheus:
         enabled: true

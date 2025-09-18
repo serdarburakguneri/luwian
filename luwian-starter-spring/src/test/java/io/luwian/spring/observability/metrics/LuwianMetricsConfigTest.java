@@ -16,7 +16,7 @@ class LuwianMetricsConfigTest {
 
         var cfg = new LuwianMetricsConfig(props, "ignored");
         var reg = new SimpleMeterRegistry();
-        cfg.customize(reg);
+        cfg.configure(reg);
 
         reg.counter("test.counter").increment();
         var m = reg.get("test.counter").counter();
