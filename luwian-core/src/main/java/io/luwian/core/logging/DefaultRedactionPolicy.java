@@ -9,12 +9,12 @@ import java.util.Set;
 /** Simple header redaction policy for sensitive headers. */
 public class DefaultRedactionPolicy implements RedactionPolicy {
 
-    private static final Set<String> REDACT = Set.of(
-        LoggingConstants.AUTHORIZATION_HEADER, 
-        LoggingConstants.COOKIE_HEADER, 
-        LoggingConstants.SET_COOKIE_HEADER, 
-        LoggingConstants.PROXY_AUTHORIZATION_HEADER
-    );
+    private static final Set<String> REDACT =
+            Set.of(
+                    LoggingConstants.AUTHORIZATION_HEADER,
+                    LoggingConstants.COOKIE_HEADER,
+                    LoggingConstants.SET_COOKIE_HEADER,
+                    LoggingConstants.PROXY_AUTHORIZATION_HEADER);
 
     @Override
     public Map<String, List<String>> redactHeaders(Map<String, List<String>> original) {

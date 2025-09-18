@@ -27,6 +27,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <revision>0.1.0-SNAPSHOT</revision>
     <surefire.version>3.2.5</surefire.version>
+    <google-java-format.version>1.23.0</google-java-format.version>
   </properties>
 
   <dependencyManagement>
@@ -72,8 +73,38 @@
             <release>${maven.compiler.release}</release>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>2.43.0</version>
+          <configuration>
+            <java>
+              <googleJavaFormat>
+                <version>${google-java-format.version}</version>
+                <style>AOSP</style>
+              </googleJavaFormat>
+              <importOrder />
+              <removeUnusedImports />
+            </java>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
+    
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+            <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
 </project>

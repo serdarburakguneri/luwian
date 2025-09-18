@@ -14,11 +14,14 @@ public final class ProblemDetailConstants {
     public static final String CORRELATION_ID_PROPERTY = "correlationId";
 
     // Error Detail Messages
-    public static final String BAD_REQUEST_DETAIL = "Request body contains invalid or unsupported values.";
+    public static final String BAD_REQUEST_DETAIL =
+            "Request body contains invalid or unsupported values.";
     public static final String NOT_FOUND_DETAIL = "Requested resource was not found.";
     public static final String FORBIDDEN_DETAIL = "You are not allowed to perform this operation.";
-    public static final String CONFLICT_DETAIL = "Request cannot be completed due to resource state.";
-    public static final String METHOD_NOT_ALLOWED_DETAIL = "HTTP method is not allowed for this endpoint.";
+    public static final String CONFLICT_DETAIL =
+            "Request cannot be completed due to resource state.";
+    public static final String METHOD_NOT_ALLOWED_DETAIL =
+            "HTTP method is not allowed for this endpoint.";
     public static final String INTERNAL_ERROR_DETAIL = "An unexpected error occurred.";
 
     // HTTP Status Codes

@@ -1,10 +1,5 @@
 package io.luwian.spring.corebridge;
 
-import org.slf4j.MDC;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import io.luwian.core.error.DefaultErrorCatalog;
 import io.luwian.core.error.ErrorCatalog;
 import io.luwian.core.logging.DefaultRedactionPolicy;
@@ -13,6 +8,10 @@ import io.luwian.core.logging.RedactionPolicy;
 import io.luwian.core.logging.Slf4jHttpLogger;
 import io.luwian.core.obs.CorrelationContext;
 import io.luwian.core.obs.ThreadLocalCorrelationContext;
+import org.slf4j.MDC;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /** Wires Spring ↔ Luwian Core adapters when luwian-core is present. */
 @Configuration
@@ -37,14 +36,23 @@ public class CoreBridgeConfiguration {
     @Bean
     public CorrelationContext luwianCorrelationContext() {
         // Bridge core correlation context with SLF4J MDC
-        return new ThreadLocalCorrelationContext(new CorrelationContext.MdcBridge() {
-            @Override public void put(String key, String value) { MDC.put(key, value); }
-            @Override public void remove(String key) { MDC.remove(key); }
-        });
+        return new ThreadLocalCorrelationContext(
+                new CorrelationContext.MdcBridge() {
+                    @Override
+                    public void put(String key, String value) {
+                        MDC.put(key, value);
+                    }
+
+                    @Override
+                    public void remove(String key) {
+                        MDC.remove(key);
+                    }
+                });
     }
 
     @Bean
-    public ProblemDetailFactory luwianProblemDetailFactory(ErrorCatalog catalog, CorrelationContext correlationContext) {
+    public ProblemDetailFactory luwianProblemDetailFactory(
+            ErrorCatalog catalog, CorrelationContext correlationContext) {
         return new ProblemDetailFactory(catalog, correlationContext);
     }
 }

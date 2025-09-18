@@ -1,14 +1,12 @@
 package io.luwian.core.logging;
 
+import io.luwian.core.http.HttpExchange;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.luwian.core.http.HttpExchange;
 
 /** Structured HTTP logger via SLF4J; emits JSON if encoder configured. */
 public class Slf4jHttpLogger implements HttpLogger {
@@ -21,8 +19,13 @@ public class Slf4jHttpLogger implements HttpLogger {
     }
 
     @Override
-    public void log(Instant ts, long durationMs, HttpExchange.Request req, HttpExchange.Response res, Map<String, Object> ctx) {
-        Map<String,Object> evt = new LinkedHashMap<>();
+    public void log(
+            Instant ts,
+            long durationMs,
+            HttpExchange.Request req,
+            HttpExchange.Response res,
+            Map<String, Object> ctx) {
+        Map<String, Object> evt = new LinkedHashMap<>();
         evt.put(LoggingConstants.TIMESTAMP_FIELD, ts.toString());
         evt.put(LoggingConstants.DURATION_MS_FIELD, durationMs);
         evt.put(LoggingConstants.METHOD_FIELD, req.method());
@@ -39,6 +42,9 @@ public class Slf4jHttpLogger implements HttpLogger {
 
     private static String safe(byte[] bytes) {
         String s = new String(bytes, StandardCharsets.UTF_8);
-        return s.length() <= LoggingConstants.MAX_BODY_LENGTH ? s : s.substring(0, LoggingConstants.MAX_BODY_LENGTH) + LoggingConstants.TRUNCATED_SUFFIX;
+        return s.length() <= LoggingConstants.MAX_BODY_LENGTH
+                ? s
+                : s.substring(0, LoggingConstants.MAX_BODY_LENGTH)
+                        + LoggingConstants.TRUNCATED_SUFFIX;
     }
 }

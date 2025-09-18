@@ -21,18 +21,43 @@ public class LuwianMetricsProperties {
     /** If true and AOP present, registers TimedAspect for @Timed. */
     private boolean aopTimed = true;
 
-    public boolean isEnabled() { return enabled; }
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-    public String getService() { return service; }
-    public void setService(String service) { this.service = service; }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-    public String getEnvironment() { return environment; }
-    public void setEnvironment(String environment) { this.environment = environment; }
+    public String getService() {
+        return service;
+    }
 
-    public String getVersion() { return version; }
-    public void setVersion(String version) { this.version = version; }
+    public void setService(String service) {
+        this.service = service;
+    }
 
-    public boolean isAopTimed() { return aopTimed; }
-    public void setAopTimed(boolean aopTimed) { this.aopTimed = aopTimed; }
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public boolean isAopTimed() {
+        return aopTimed;
+    }
+
+    public void setAopTimed(boolean aopTimed) {
+        this.aopTimed = aopTimed;
+    }
 }

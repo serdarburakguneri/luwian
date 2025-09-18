@@ -5,14 +5,11 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 @Command(
-    name = "luwian",
-    mixinStandardHelpOptions = true,
-    version = "luwian 0.1.0",
-    description = "Luwian CLI — Enterprise Java scaffolding",
-    subcommands = {
-        NewServiceCommand.class
-    }
-)
+        name = "luwian",
+        mixinStandardHelpOptions = true,
+        version = "luwian 0.1.0",
+        description = "Luwian CLI — Enterprise Java scaffolding",
+        subcommands = {NewServiceCommand.class})
 public class LuwianCli implements Runnable {
 
     public static void main(String[] args) {
@@ -21,7 +18,7 @@ public class LuwianCli implements Runnable {
     }
 
     @Override
-    public void run() {       
+    public void run() {
         new CommandLine(this).usage(System.out);
     }
 }

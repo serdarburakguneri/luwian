@@ -11,15 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.apache.commons.text.StringSubstitutor;
 
 /**
  * - Reads an index file from classpath that lists template file paths (relative to classpath root)
- * - For each file, loads the resource and performs {{var}} replacement
- * - Writes to the target directory mirroring the source structure
+ * - For each file, loads the resource and performs {{var}} replacement - Writes to the target
+ * directory mirroring the source structure
  *
- * Supported placeholder syntax: {{var}} (implemented on top of StringSubstitutor with ${var})
+ * <p>Supported placeholder syntax: {{var}} (implemented on top of StringSubstitutor with ${var})
  */
 public class TemplateEngine {
 
@@ -29,20 +28,24 @@ public class TemplateEngine {
         this.force = force;
     }
 
-    public void renderFromClasspath(String indexResource, String templateBase, Path targetRoot, Map<String, String> model) throws IOException {
+    public void renderFromClasspath(
+            String indexResource, String templateBase, Path targetRoot, Map<String, String> model)
+            throws IOException {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         try (InputStream in = cl.getResourceAsStream(indexResource)) {
             if (in == null) throw new IOException("Missing resource index: " + indexResource);
-            List<String> paths = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))
-                    .lines().filter(s -> !s.isBlank() && !s.startsWith("#"))
-                    .collect(Collectors.toList());
+            List<String> paths =
+                    new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))
+                            .lines()
+                            .filter(s -> !s.isBlank() && !s.startsWith("#"))
+                            .collect(Collectors.toList());
             for (String rel : paths) {
                 String templatePath = templateBase + rel;
                 String content = readResourceAsString(templatePath);
                 String rendered = substitute(content, model);
-                
-                String renderedPath = substitute(rel, model);                
-               
+
+                String renderedPath = substitute(rel, model);
+
                 if (renderedPath.endsWith(".mustache")) {
                     renderedPath = renderedPath.substring(0, renderedPath.length() - 9);
                 }
@@ -66,9 +69,9 @@ public class TemplateEngine {
         }
     }
 
-    private String substitute(String text, Map<String, String> model) {       
+    private String substitute(String text, Map<String, String> model) {
         String normalized = text.replace("{{", "${").replace("}}", "}");
-        Map<String, String> m = new HashMap<>(model);       
+        Map<String, String> m = new HashMap<>(model);
         return new StringSubstitutor(m).replace(normalized);
     }
 }

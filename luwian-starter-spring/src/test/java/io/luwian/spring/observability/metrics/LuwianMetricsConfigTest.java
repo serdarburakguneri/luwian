@@ -1,9 +1,9 @@
 package io.luwian.spring.observability.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.Test;
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import org.junit.jupiter.api.Test;
 
 class LuwianMetricsConfigTest {
 

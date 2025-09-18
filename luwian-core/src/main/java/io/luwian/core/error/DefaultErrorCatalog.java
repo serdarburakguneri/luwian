@@ -8,14 +8,50 @@ import java.util.Optional;
 /** Default exception → LUW error code mapping. */
 public class DefaultErrorCatalog implements ErrorCatalog {
 
-    private static final Map<Class<? extends Throwable>, ErrorCode> MAP = Map.ofEntries(
-        Map.entry(NoSuchElementException.class, new ErrorCode(ErrorConstants.NOT_FOUND_CODE, ErrorConstants.NOT_FOUND_STATUS, ErrorConstants.NOT_FOUND_TITLE, ErrorConstants.NOT_FOUND_TYPE_PATH)),
-        Map.entry(IllegalArgumentException.class, new ErrorCode(ErrorConstants.BAD_REQUEST_CODE, ErrorConstants.BAD_REQUEST_STATUS, ErrorConstants.BAD_REQUEST_TITLE, ErrorConstants.BAD_REQUEST_TYPE_PATH)),
-        Map.entry(IllegalStateException.class, new ErrorCode(ErrorConstants.INVALID_STATE_CODE, ErrorConstants.CONFLICT_STATUS, ErrorConstants.INVALID_STATE_TITLE, ErrorConstants.CONFLICT_TYPE_PATH)),
-        Map.entry(SecurityException.class, new ErrorCode(ErrorConstants.FORBIDDEN_CODE, ErrorConstants.FORBIDDEN_STATUS, ErrorConstants.FORBIDDEN_TITLE, ErrorConstants.FORBIDDEN_TYPE_PATH)),
-        Map.entry(AccessDeniedException.class, new ErrorCode(ErrorConstants.ACCESS_DENIED_CODE, ErrorConstants.FORBIDDEN_STATUS, ErrorConstants.FORBIDDEN_TITLE, ErrorConstants.FORBIDDEN_TYPE_PATH)),
-        Map.entry(UnsupportedOperationException.class, new ErrorCode(ErrorConstants.METHOD_NOT_ALLOWED_CODE, ErrorConstants.METHOD_NOT_ALLOWED_STATUS, ErrorConstants.METHOD_NOT_ALLOWED_TITLE, ErrorConstants.METHOD_NOT_ALLOWED_TYPE_PATH))
-    );
+    private static final Map<Class<? extends Throwable>, ErrorCode> MAP =
+            Map.ofEntries(
+                    Map.entry(
+                            NoSuchElementException.class,
+                            new ErrorCode(
+                                    ErrorConstants.NOT_FOUND_CODE,
+                                    ErrorConstants.NOT_FOUND_STATUS,
+                                    ErrorConstants.NOT_FOUND_TITLE,
+                                    ErrorConstants.NOT_FOUND_TYPE_PATH)),
+                    Map.entry(
+                            IllegalArgumentException.class,
+                            new ErrorCode(
+                                    ErrorConstants.BAD_REQUEST_CODE,
+                                    ErrorConstants.BAD_REQUEST_STATUS,
+                                    ErrorConstants.BAD_REQUEST_TITLE,
+                                    ErrorConstants.BAD_REQUEST_TYPE_PATH)),
+                    Map.entry(
+                            IllegalStateException.class,
+                            new ErrorCode(
+                                    ErrorConstants.INVALID_STATE_CODE,
+                                    ErrorConstants.CONFLICT_STATUS,
+                                    ErrorConstants.INVALID_STATE_TITLE,
+                                    ErrorConstants.CONFLICT_TYPE_PATH)),
+                    Map.entry(
+                            SecurityException.class,
+                            new ErrorCode(
+                                    ErrorConstants.FORBIDDEN_CODE,
+                                    ErrorConstants.FORBIDDEN_STATUS,
+                                    ErrorConstants.FORBIDDEN_TITLE,
+                                    ErrorConstants.FORBIDDEN_TYPE_PATH)),
+                    Map.entry(
+                            AccessDeniedException.class,
+                            new ErrorCode(
+                                    ErrorConstants.ACCESS_DENIED_CODE,
+                                    ErrorConstants.FORBIDDEN_STATUS,
+                                    ErrorConstants.FORBIDDEN_TITLE,
+                                    ErrorConstants.FORBIDDEN_TYPE_PATH)),
+                    Map.entry(
+                            UnsupportedOperationException.class,
+                            new ErrorCode(
+                                    ErrorConstants.METHOD_NOT_ALLOWED_CODE,
+                                    ErrorConstants.METHOD_NOT_ALLOWED_STATUS,
+                                    ErrorConstants.METHOD_NOT_ALLOWED_TITLE,
+                                    ErrorConstants.METHOD_NOT_ALLOWED_TYPE_PATH)));
 
     @Override
     public Optional<ErrorCode> resolve(Throwable error) {
@@ -27,6 +63,11 @@ public class DefaultErrorCatalog implements ErrorCatalog {
             if (ec != null) return Optional.of(ec);
             c = c.getSuperclass();
         }
-        return Optional.of(new ErrorCode(ErrorConstants.INTERNAL_ERROR_CODE, ErrorConstants.INTERNAL_ERROR_STATUS, ErrorConstants.INTERNAL_ERROR_TITLE, ErrorConstants.INTERNAL_ERROR_TYPE_PATH));
+        return Optional.of(
+                new ErrorCode(
+                        ErrorConstants.INTERNAL_ERROR_CODE,
+                        ErrorConstants.INTERNAL_ERROR_STATUS,
+                        ErrorConstants.INTERNAL_ERROR_TITLE,
+                        ErrorConstants.INTERNAL_ERROR_TYPE_PATH));
     }
 }

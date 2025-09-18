@@ -1,40 +1,57 @@
 package io.luwian.cli.commands;
 
+import io.luwian.cli.util.TemplateEngine;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.luwian.cli.util.TemplateEngine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@Command(name = "new", description = "Create new Luwian resources",
-        subcommands = { NewServiceCommand.Service.class })
+@Command(
+        name = "new",
+        description = "Create new Luwian resources",
+        subcommands = {NewServiceCommand.Service.class})
 public class NewServiceCommand implements Runnable {
-    @Override public void run() { System.out.println("Specify a subcommand (e.g., 'luwian new service')."); }
+    @Override
+    public void run() {
+        System.out.println("Specify a subcommand (e.g., 'luwian new service').");
+    }
 
     @Command(name = "service", description = "Create a hello-only Spring Boot service")
     public static class Service implements Runnable {
 
-        @Parameters(index = "0", paramLabel = "<name>", description = "Service name (folder & artifactId)")
+        @Parameters(
+                index = "0",
+                paramLabel = "<name>",
+                description = "Service name (folder & artifactId)")
         String name;
 
-        @Option(names = "--pkg", required = true, description = "Base package, e.g., com.acme.orders")
+        @Option(
+                names = "--pkg",
+                required = true,
+                description = "Base package, e.g., com.acme.orders")
         String pkg;
 
-        @Option(names = "--http-port", defaultValue = "8080", description = "HTTP port (default: 8080)")
+        @Option(
+                names = "--http-port",
+                defaultValue = "8080",
+                description = "HTTP port (default: 8080)")
         int httpPort;
 
-        @Option(names = "--dir", defaultValue = ".", description = "Target directory (default: current)")
+        @Option(
+                names = "--dir",
+                defaultValue = ".",
+                description = "Target directory (default: current)")
         Path targetDir;
 
         @Option(names = "--force", description = "Overwrite existing files without prompt")
         boolean force;
 
-        @Override public void run() {
+        @Override
+        public void run() {
             try {
                 Path serviceRoot = targetDir.resolve(name);
                 Files.createDirectories(serviceRoot);

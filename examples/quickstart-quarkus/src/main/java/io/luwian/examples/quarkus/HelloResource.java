@@ -1,4 +1,3 @@
-
 package io.luwian.examples.quarkus;
 
 import jakarta.ws.rs.GET;

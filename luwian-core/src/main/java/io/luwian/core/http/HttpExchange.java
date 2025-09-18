@@ -8,14 +8,21 @@ import java.util.Optional;
 public interface HttpExchange {
     interface Request {
         String method();
+
         String path();
+
         Optional<String> query();
+
         Map<String, List<String>> headers();
-        Optional<byte[]> body(); 
+
+        Optional<byte[]> body();
     }
+
     interface Response {
         int status();
+
         Map<String, List<String>> headers();
-        Optional<byte[]> body(); 
+
+        Optional<byte[]> body();
     }
 }

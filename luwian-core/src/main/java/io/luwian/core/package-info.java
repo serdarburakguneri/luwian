@@ -1,5 +1,2 @@
-
-/**
- * Luwian core abstractions (scaffold).
- */
+/** Luwian core abstractions (scaffold). */
 package io.luwian.core;

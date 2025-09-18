@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LuwianErrorProperties {
 
     /**
-     * Controls whether stacktrace-like details are included in Problem+JSON.
-     * Values: never | on-trace (default on-trace)
+     * Controls whether stacktrace-like details are included in Problem+JSON. Values: never |
+     * on-trace (default on-trace)
      */
     private IncludeStacktracePolicy includeStacktrace = IncludeStacktracePolicy.ON_TRACE;
 
