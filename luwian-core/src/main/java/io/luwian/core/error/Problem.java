@@ -8,9 +8,9 @@ public interface Problem {
     URI type();
     String title();
     int status();
-    String detail();      // optional
-    URI instance();       // optional
-    Map<String,Object> extensions(); // e.g., correlationId, errorCode, violations
+    String detail();     
+    URI instance();       
+    Map<String,Object> extensions();
 
     interface Builder {
         Builder type(URI type);

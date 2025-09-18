@@ -11,11 +11,11 @@ public interface HttpExchange {
         String path();
         Optional<String> query();
         Map<String, List<String>> headers();
-        Optional<byte[]> body(); // only if body logging is enabled
+        Optional<byte[]> body(); 
     }
     interface Response {
         int status();
         Map<String, List<String>> headers();
-        Optional<byte[]> body(); // only if body logging is enabled
+        Optional<byte[]> body(); 
     }
 }

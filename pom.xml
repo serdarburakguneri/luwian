@@ -31,6 +31,12 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Luwian Core -->
+      <dependency>
+        <groupId>io.luwian</groupId>
+        <artifactId>luwian-core</artifactId>
+        <version>${revision}</version>
+      </dependency>
       <!-- Quarkus BOM for example module -->
       <dependency>
         <groupId>io.quarkus</groupId>

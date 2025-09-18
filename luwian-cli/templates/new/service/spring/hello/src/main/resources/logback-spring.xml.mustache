@@ -1,0 +1,10 @@
+<!-- Optional JSON logging example. Requires logstash-logback-encoder on classpath. -->
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Use LogstashEncoder for JSON logs -->
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>

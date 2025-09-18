@@ -9,6 +9,8 @@
   <name>{{service}}</name>
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
+    <!-- Pin Luwian version once you publish -->
+    <luwian.version>0.1.0-SNAPSHOT</luwian.version>
   </properties>
   <dependencies>
     <dependency>
@@ -19,12 +21,21 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
-    <!-- Later: include Luwian Spring starter when published
+    <!-- Luwian starter: logging, error handler, (metrics/tracing when enabled) -->
     <dependency>
       <groupId>io.luwian</groupId>
       <artifactId>luwian-starter-spring</artifactId>
       <version>${luwian.version}</version>
-    </dependency> -->
+    </dependency>
+
+    <!-- Optional: JSON logs (Logback encoder). Remove if you don't want JSON by default. -->
+    <!--
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>7.4</version>
+    </dependency>
+    -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

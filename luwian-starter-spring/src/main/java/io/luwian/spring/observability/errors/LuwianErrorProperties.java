@@ -19,4 +19,10 @@ public class LuwianErrorProperties {
     public void setIncludeStacktrace(IncludeStacktracePolicy includeStacktrace) {
         this.includeStacktrace = includeStacktrace;
     }
+
+    /** Policy for including stacktrace details in Problem+JSON. */
+    public enum IncludeStacktracePolicy {
+        NEVER,
+        ON_TRACE
+    }
 }
