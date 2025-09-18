@@ -1,0 +1,16 @@
+src/main/java/.../
+  shared/                       # shared kernel (common types, errors)
+  sales/
+    domain/
+    app/
+    ports/in/
+    ports/out/
+    adapters/in/web/
+    adapters/out/persistence/
+  billing/
+    domain/
+    app/
+    ports/in/
+    ports/out/
+    adapters/...
+  config/

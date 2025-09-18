@@ -1,0 +1,11 @@
+src/main/java/.../
+  app/                          # use cases (application services)
+  domain/                       # aggregates/value objects/domain services
+  ports/
+    in/                         # input ports (interfaces)
+    out/                        # output ports (interfaces)
+  adapters/
+    in/web/                     # controllers → input ports
+    out/persistence/            # repos → output ports
+    out/http/                   # downstream HTTP clients
+  config/

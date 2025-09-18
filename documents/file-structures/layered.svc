@@ -1,0 +1,6 @@
+src/main/java/.../
+  config/
+  web/           # controllers
+  service/       # application services
+  domain/        # entities + domain services (light)
+  repo/          # Spring Data adapters
