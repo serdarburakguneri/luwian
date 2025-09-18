@@ -8,6 +8,21 @@ mvn spring-boot:run
 # -> http://localhost:{{httpPort}}/hello
 ```
 
+## Health & Observability
+
+### Health Endpoints
+- **Overall Health**: `http://localhost:{{httpPort}}/actuator/health`
+- **Liveness**: `http://localhost:{{httpPort}}/actuator/health/liveness`
+- **Readiness**: `http://localhost:{{httpPort}}/actuator/health/readiness`
+
+### Built-in Health Checks
+- **Deadlock Detection** (Liveness): Monitors for thread deadlocks
+- **Heap Pressure** (Readiness): Monitors memory usage and free heap space
+
+### Other Endpoints
+- **Metrics**: `http://localhost:{{httpPort}}/actuator/metrics`
+- **Prometheus**: `http://localhost:{{httpPort}}/actuator/prometheus`
+
 ## Next
 - Generate business code later:
 ```bash

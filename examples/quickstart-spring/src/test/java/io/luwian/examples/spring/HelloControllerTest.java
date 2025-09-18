@@ -98,4 +98,39 @@ class HelloControllerTest {
         assertThat(response.getBody()).contains("test");
         assertThat(response.getBody()).contains("123");
     }
+
+    @Test
+    void actuatorHealthEndpointReturnsSuccess() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(
+                        "http://localhost:" + port + "/actuator/health", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("UP");
+        // Debug: print the actual response to see what's available
+        System.out.println("Health response: " + response.getBody());
+        // The health endpoint should be working with liveness and readiness groups
+        assertThat(response.getBody()).contains("liveness");
+        assertThat(response.getBody()).contains("readiness");
+    }
+
+    @Test
+    void actuatorLivenessEndpointReturnsSuccess() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(
+                        "http://localhost:" + port + "/actuator/health/liveness", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("UP");
+    }
+
+    @Test
+    void actuatorReadinessEndpointReturnsSuccess() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(
+                        "http://localhost:" + port + "/actuator/health/readiness", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("UP");
+    }
 }

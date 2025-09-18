@@ -5,10 +5,20 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health,info,prometheus,metrics
   endpoint:
     health:
       probes:
+        enabled: true
+      show-details: always
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
         enabled: true
 
 # Luwian defaults: safe & observable out of the box
@@ -24,7 +34,13 @@ luwian:
     service: ${spring.application.name:hello-service}
     environment: dev
     version: 0.1.0
-    aop-timed: true
+    aop-timed: false    # disable AOP timed aspect (requires AspectJ)
+  health:
+    enabled: true
+    deadlock: true      # liveness: detect thread deadlocks
+    heap: true          # readiness: monitor heap pressure
+    heapMinFreeBytes: 67108864    # 64 MiB minimum free heap
+    heapMinFreeRatio: 0.05        # 5% minimum free ratio
   tracing:
     enabled: true
 

@@ -16,6 +16,7 @@ luwian:
     service: quickstart-spring
     environment: development
     version: 1.0.0
+    aop-timed: false
 
 # Spring Boot Actuator
 management:
@@ -27,6 +28,12 @@ management:
     health:
       probes:
         enabled: true
+      show-details: always
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
   metrics:
     export:
       prometheus:

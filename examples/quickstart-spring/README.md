@@ -24,13 +24,38 @@ java -jar target/quickstart-spring-0.1.0-SNAPSHOT.jar
 
 ## Testing Endpoints
 
-- `GET /api/hello` - Basic hello endpoint
-- `GET /api/health` - Health check
-- `GET /api/error/not-found` - Triggers 404 error (handled by Luwian)
-- `GET /api/error/bad-request` - Triggers 400 error (handled by Luwian)
-- `GET /api/error/internal` - Triggers 500 error (handled by Luwian)
-- `GET /api/metrics-demo` - Demonstrates metrics collection
-- `POST /api/echo` - Echo endpoint for request/response logging
+```bash
+# Basic hello endpoint
+curl http://localhost:8080/api/hello
+```
+
+```bash
+# Health check
+curl http://localhost:8080/api/health
+```
+
+```bash
+# Error handling examples (handled by Luwian)
+curl http://localhost:8080/api/error/not-found
+```
+
+```bash
+curl http://localhost:8080/api/error/bad-request
+```
+
+```bash
+curl http://localhost:8080/api/error/internal
+```
+
+```bash
+# Metrics collection demo
+curl http://localhost:8080/api/metrics-demo
+```
+
+```bash
+# Echo endpoint for request/response logging
+curl -X POST http://localhost:8080/api/echo -H "Content-Type: application/json" -d '{"message": "Hello Luwian!", "test": true}'
+```
 
 ## Observability
 

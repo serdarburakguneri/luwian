@@ -3,6 +3,7 @@ package io.luwian.spring.autoconfigure;
 import io.luwian.spring.corebridge.CoreBridgeConfiguration;
 import io.luwian.spring.observability.errors.LuwianErrorHandler;
 import io.luwian.spring.observability.errors.LuwianErrorProperties;
+import io.luwian.spring.observability.health.LuwianHealthProperties;
 import io.luwian.spring.observability.logging.LuwianJsonLoggingConfig;
 import io.luwian.spring.observability.metrics.LuwianMetricsConfig;
 import io.luwian.spring.observability.metrics.LuwianMetricsProperties;
@@ -19,7 +20,11 @@ import org.springframework.context.annotation.Import;
 /** Spring Boot AutoConfiguration entry for Luwian. */
 @AutoConfiguration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties({LuwianErrorProperties.class, LuwianMetricsProperties.class})
+@EnableConfigurationProperties({
+    LuwianErrorProperties.class,
+    LuwianMetricsProperties.class,
+    LuwianHealthProperties.class
+})
 @Import(CoreBridgeConfiguration.class)
 public class LuwianAutoConfiguration {
 
@@ -65,6 +70,8 @@ public class LuwianAutoConfiguration {
             io.micrometer.core.instrument.MeterRegistry registry) {
         return new io.micrometer.core.aop.TimedAspect(registry);
     }
+
+    // --- Health: liveness/readiness contributors are auto-registered via @Component ---
 
     // --- Tracing toggle placeholder ---
     @Bean
