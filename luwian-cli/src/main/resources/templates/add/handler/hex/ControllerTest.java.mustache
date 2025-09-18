@@ -1,0 +1,27 @@
+package {{pkg}}.adapters.in.web;
+
+import {{pkg}}.ports.in.{{Name}}UseCase;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest({{controllerName}}.class)
+class {{controllerName}}Test {
+
+    @Autowired
+    MockMvc mvc;
+
+    @MockBean
+    {{Name}}UseCase useCase;
+
+    @Test
+    void ok() throws Exception {
+        mvc.perform(get("{{path}}"))
+           .andExpect(status().isOk());
+    }
+}

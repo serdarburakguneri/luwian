@@ -1,5 +1,6 @@
 package io.luwian.cli;
 
+import io.luwian.cli.commands.AddHandlerCommand;
 import io.luwian.cli.commands.NewServiceCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -9,7 +10,7 @@ import picocli.CommandLine.Command;
         mixinStandardHelpOptions = true,
         version = "luwian 0.1.0",
         description = "Luwian CLI — Enterprise Java scaffolding",
-        subcommands = {NewServiceCommand.class})
+        subcommands = {NewServiceCommand.class, AddHandlerCommand.class})
 public class LuwianCli implements Runnable {
 
     public static void main(String[] args) {

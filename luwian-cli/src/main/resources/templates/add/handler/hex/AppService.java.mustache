@@ -1,0 +1,10 @@
+package {{pkg}}.app;
+
+import {{pkg}}.ports.in.{{Name}}UseCase;
+
+public class {{Name}}Service implements {{Name}}UseCase {
+    @Override
+    public Object handle() {
+        return new {{pkg}}.adapters.in.web.dto.{{dtoOut}}("ok");
+    }
+}

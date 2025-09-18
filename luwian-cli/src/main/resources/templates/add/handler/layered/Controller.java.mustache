@@ -1,0 +1,22 @@
+package {{pkg}}.web;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+{{timedImport}}
+@RestController
+@RequestMapping(path = "{{path}}", produces = "{{produces}}")
+public class {{controllerName}} {
+
+    private final {{Name}}Service service;
+
+    public {{controllerName}}({{Name}}Service service) {
+        this.service = service;
+    }
+
+    @{{method}}
+    {{timedAnnotation}}
+    public ResponseEntity<?> handle() {
+        return ResponseEntity.status({{status}}).body(service.handle());
+    }
+}

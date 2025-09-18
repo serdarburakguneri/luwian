@@ -1,0 +1,23 @@
+package {{pkg}}.adapters.in.web;
+
+import {{pkg}}.ports.in.{{Name}}UseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+{{timedImport}}
+@RestController
+@RequestMapping(path = "{{path}}", produces = "{{produces}}")
+public class {{controllerName}} {
+
+    private final {{Name}}UseCase useCase;
+
+    public {{controllerName}}({{Name}}UseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    @{{method}}
+    {{timedAnnotation}}
+    public ResponseEntity<?> handle() {
+        return ResponseEntity.status({{status}}).body(useCase.handle());
+    }
+}
