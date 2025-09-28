@@ -2,7 +2,7 @@ package io.luwian.core.obs;
 
 import java.util.Optional;
 
-/** Framework-agnostic correlation & tenancy context. */
+/** Correlation & tenancy context. */
 public interface CorrelationContext {
     void setCorrelationId(String id);
 
@@ -11,6 +11,14 @@ public interface CorrelationContext {
     void setTenantId(String id);
 
     Optional<String> getTenantId();
+
+    /** Optional end-user identifier. Default no-op to retain binary compatibility. */
+    default void setUserId(String id) {}
+
+    /** Optional end-user identifier. Default empty. */
+    default Optional<String> getUserId() {
+        return Optional.empty();
+    }
 
     void clear();
 

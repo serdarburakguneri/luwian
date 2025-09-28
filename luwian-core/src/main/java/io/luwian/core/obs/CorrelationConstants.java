@@ -8,4 +8,5 @@ public final class CorrelationConstants {
     // MDC Keys
     public static final String CORRELATION_ID_KEY = "correlationId";
     public static final String TENANT_ID_KEY = "tenantId";
+    public static final String USER_ID_KEY = "userId";
 }

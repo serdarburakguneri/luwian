@@ -7,6 +7,7 @@ public class ThreadLocalCorrelationContext implements CorrelationContext {
 
     private final ThreadLocal<String> cid = new ThreadLocal<>();
     private final ThreadLocal<String> tenant = new ThreadLocal<>();
+    private final ThreadLocal<String> user = new ThreadLocal<>();
     private final MdcBridge mdc;
 
     public ThreadLocalCorrelationContext() {
@@ -42,12 +43,26 @@ public class ThreadLocalCorrelationContext implements CorrelationContext {
     }
 
     @Override
+    public void setUserId(String id) {
+        user.set(id);
+        if (mdc != null && id != null && !id.isBlank())
+            mdc.put(CorrelationConstants.USER_ID_KEY, id);
+    }
+
+    @Override
+    public Optional<String> getUserId() {
+        return Optional.ofNullable(user.get());
+    }
+
+    @Override
     public void clear() {
         if (mdc != null) {
             mdc.remove(CorrelationConstants.CORRELATION_ID_KEY);
             mdc.remove(CorrelationConstants.TENANT_ID_KEY);
+            mdc.remove(CorrelationConstants.USER_ID_KEY);
         }
         cid.remove();
         tenant.remove();
+        user.remove();
     }
 }
