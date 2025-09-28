@@ -1,13 +1,20 @@
 package io.luwian.spring.autoconfigure;
 
+import io.luwian.core.logging.HttpLogger;
+import io.luwian.core.obs.CorrelationContext;
 import io.luwian.spring.corebridge.CoreBridgeConfiguration;
 import io.luwian.spring.observability.errors.LuwianErrorHandler;
 import io.luwian.spring.observability.errors.LuwianErrorProperties;
 import io.luwian.spring.observability.health.LuwianHealthProperties;
+import io.luwian.spring.observability.logging.LuwianCorrelationFilter;
+import io.luwian.spring.observability.logging.LuwianHttpLoggingFilter;
 import io.luwian.spring.observability.logging.LuwianJsonLoggingConfig;
+import io.luwian.spring.observability.logging.LuwianLoggingProperties;
 import io.luwian.spring.observability.metrics.LuwianMetricsConfig;
 import io.luwian.spring.observability.metrics.LuwianMetricsProperties;
 import io.luwian.spring.observability.tracing.LuwianTracingConfig;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -23,7 +30,8 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({
     LuwianErrorProperties.class,
     LuwianMetricsProperties.class,
-    LuwianHealthProperties.class
+    LuwianHealthProperties.class,
+    LuwianLoggingProperties.class
 })
 @Import(CoreBridgeConfiguration.class)
 public class LuwianAutoConfiguration {
@@ -40,8 +48,9 @@ public class LuwianAutoConfiguration {
 
     // --- Error handler ---
     @Bean
-    LuwianErrorHandler luwianErrorHandler(LuwianErrorProperties props) {
-        return new LuwianErrorHandler(props);
+    LuwianErrorHandler luwianErrorHandler(
+            LuwianErrorProperties props, io.luwian.spring.corebridge.ProblemDetailFactory factory) {
+        return new LuwianErrorHandler(props, factory);
     }
 
     // --- Metrics (common tags) ---
@@ -53,6 +62,16 @@ public class LuwianAutoConfiguration {
     LuwianMetricsConfig luwianMetricsConfig(
             LuwianMetricsProperties props, @Value("${spring.application.name:}") String appName) {
         return new LuwianMetricsConfig(props, appName);
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+            value = "luwian.metrics.enabled",
+            havingValue = "true",
+            matchIfMissing = true)
+    InitializingBean luwianMetricsCommonTagsInitializer(
+            LuwianMetricsConfig config, MeterRegistry registry) {
+        return () -> config.configure(registry);
     }
 
     // --- Optional: AOP TimedAspect support if Micrometer AOP & AOP infra are present ---
@@ -81,5 +100,24 @@ public class LuwianAutoConfiguration {
             matchIfMissing = true)
     LuwianTracingConfig luwianTracingConfig() {
         return new LuwianTracingConfig();
+    }
+
+    // --- Filters ---
+    @Bean
+    @ConditionalOnProperty(
+            value = "luwian.logging.http.enabled",
+            havingValue = "true",
+            matchIfMissing = true)
+    LuwianHttpLoggingFilter luwianHttpLoggingFilter(
+            HttpLogger httpLogger, LuwianLoggingProperties loggingProps) {
+        boolean includeBody = loggingProps.getHttp().isBody();
+        return new LuwianHttpLoggingFilter(httpLogger, includeBody);
+    }
+
+    @Bean
+    LuwianCorrelationFilter luwianCorrelationFilter(
+            CorrelationContext correlationContext,
+            @Value("${luwian.tenancy.header:X-Tenant}") String tenantHeader) {
+        return new LuwianCorrelationFilter(correlationContext, tenantHeader);
     }
 }
