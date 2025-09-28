@@ -3,7 +3,7 @@ package io.luwian.core.error;
 import java.net.URI;
 import java.util.Map;
 
-/** Framework-agnostic RFC7807 Problem payload. */
+/** RFC 7807 Problem abstraction with an extensible payload. */
 public interface Problem {
     URI type();
 
@@ -17,6 +17,7 @@ public interface Problem {
 
     Map<String, Object> extensions();
 
+    /** Fluent builder for Problems. */
     interface Builder {
         Builder type(URI type);
 

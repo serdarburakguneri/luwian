@@ -1,6 +1,7 @@
 package io.luwian.core.error;
 
 import java.nio.file.AccessDeniedException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -53,6 +54,46 @@ public class DefaultErrorCatalog implements ErrorCatalog {
                                     ErrorConstants.METHOD_NOT_ALLOWED_TITLE,
                                     ErrorConstants.METHOD_NOT_ALLOWED_TYPE_PATH)));
 
+    private static final Map<Class<? extends Throwable>, ErrorCode> REFLECTIVE = buildReflective();
+
+    private static Map<Class<? extends Throwable>, ErrorCode> buildReflective() {
+        Map<Class<? extends Throwable>, ErrorCode> m = new HashMap<>();
+        // jakarta.validation.ConstraintViolationException → 400 validation-error (VAL-001)
+        try {
+            @SuppressWarnings("unchecked")
+            Class<? extends Throwable> c =
+                    (Class<? extends Throwable>)
+                            Class.forName("jakarta.validation.ConstraintViolationException");
+            m.put(
+                    c,
+                    new ErrorCode(
+                            "LUW-VAL-001",
+                            ErrorConstants.BAD_REQUEST_STATUS,
+                            "Validation failed",
+                            "validation-error"));
+        } catch (ClassNotFoundException ignored) {
+        }
+
+        // org.springframework.web.bind.MethodArgumentNotValidException → 400 validation-error
+        // (VAL-002)
+        try {
+            @SuppressWarnings("unchecked")
+            Class<? extends Throwable> c =
+                    (Class<? extends Throwable>)
+                            Class.forName(
+                                    "org.springframework.web.bind.MethodArgumentNotValidException");
+            m.put(
+                    c,
+                    new ErrorCode(
+                            "LUW-VAL-002",
+                            ErrorConstants.BAD_REQUEST_STATUS,
+                            "Validation failed",
+                            "validation-error"));
+        } catch (ClassNotFoundException ignored) {
+        }
+        return m;
+    }
+
     @Override
     public Optional<ErrorCode> resolve(Throwable error) {
         Class<?> c = error.getClass();
@@ -60,6 +101,7 @@ public class DefaultErrorCatalog implements ErrorCatalog {
             @SuppressWarnings("unchecked")
             Class<? extends Throwable> throwableClass = (Class<? extends Throwable>) c;
             var ec = MAP.get(throwableClass);
+            if (ec == null) ec = REFLECTIVE.get(throwableClass);
             if (ec != null) return Optional.of(ec);
             c = c.getSuperclass();
         }
